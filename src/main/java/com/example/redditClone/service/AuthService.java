@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class AuthService {
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
