@@ -56,7 +56,7 @@ public class AuthService {
     }
     @Transactional
     private void fetchUserAndEnable(VerificationToken verificationToken){
-        String username = verificationToken.getUser().getUsername()
+        String username = verificationToken.getUser().getUsername();
         User user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User NA"));
         user.setEnabled(true);
         userRepository.save(user);
