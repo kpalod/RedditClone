@@ -1,6 +1,8 @@
 package com.example.redditClone.service;
 
 import com.example.redditClone.dto.SubredditDto;
+import com.example.redditClone.exceptions.SpringRedditException;
+import com.example.redditClone.mapper.SubredditMapper;
 import com.example.redditClone.model.Subreddit;
 import com.example.redditClone.repository.SubredditRepository;
 import jakarta.transaction.Transactional;
@@ -18,9 +20,10 @@ import java.util.stream.Collectors;
 public class SubredditService {
 
     private final SubredditRepository subredditRepository;
+    private final SubredditMapper subredditMapper;
     @Transactional
     public SubredditDto save(SubredditDto subredditDto){
-        Subreddit save = subredditRepository.save(mapSubredditDto(subredditDto));
+        Subreddit save = subredditRepository.save(subredditMapper.mapDtotoSubreddit(subredditDto));
         subredditDto.setId(save.getId());
         return subredditDto;
     }
@@ -28,23 +31,15 @@ public class SubredditService {
     public List<SubredditDto> getAll(){
         return subredditRepository.findAll()
                 .stream()
-                .map(this::mapToDto)
+                .map(subredditMapper::mapSubredditToDto)
                 .collect(Collectors.toList());
     }
-    private Subreddit mapSubredditDto(SubredditDto subredditDto){
-        return Subreddit.builder()
-                .name(subredditDto.getName())
-                .description(subredditDto.getDescription())
-                .build();
+    public SubredditDto getSubreddit(Long id){
+        Subreddit subreddit = subredditRepository.findById(id).orElseThrow(() -> new SpringRedditException("No subreddit found"));
+        return subredditMapper.mapSubredditToDto(subreddit);
     }
 
-    private SubredditDto mapToDto(Subreddit subreddit){
-        return SubredditDto.builder()
-                .name(subreddit.getName())
-                .id(subreddit.getId())
-                .numberOfPosts(subreddit.getPosts().size())
-                .build();
-    }
+
 
 
 }
