@@ -1,5 +1,6 @@
 package com.example.redditClone.service;
 
+import com.example.redditClone.dto.LoginRequest;
 import com.example.redditClone.dto.RegisterRequest;
 import com.example.redditClone.exceptions.SpringRedditException;
 import com.example.redditClone.model.NotificationEmail;
@@ -7,9 +8,14 @@ import com.example.redditClone.model.User;
 import com.example.redditClone.model.VerificationToken;
 import com.example.redditClone.repository.UserRepository;
 import com.example.redditClone.repository.VerificationTokenRepository;
+import com.example.redditClone.security.JwtProvider;
+import com.example.redditClone.dto.AuthenticationResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +30,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
-
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
     @Transactional
     public void signup(RegisterRequest registerRequest){
         User user = new User();
@@ -37,7 +44,7 @@ public class AuthService {
         String token = generateVerificationToken(user);
         mailService.sendMail(new NotificationEmail("Please click on the below link to activate your account",user.getEmail(),"Thank You for " +
                 "signing up on spring reddit, " + " please click on the below link to activate your account : "+
-                "https://localhost:8080/api/auth/accountverification/"+token));
+                "http://localhost:8080/api/auth/accountVerification/" + token));
 
     }
     private String generateVerificationToken(User user){
@@ -60,5 +67,15 @@ public class AuthService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User NA"));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+    public AuthenticationResponse login(LoginRequest loginRequest){
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+        return  AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .username(loginRequest.getUsername())
+                .build();
     }
 }
