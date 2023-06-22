@@ -10,6 +10,7 @@ import com.example.redditClone.repository.UserRepository;
 import com.example.redditClone.repository.VerificationTokenRepository;
 import com.example.redditClone.security.JwtProvider;
 import com.example.redditClone.dto.AuthenticationResponse;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -86,5 +87,9 @@ public class AuthService {
                 .authenticationToken(token)
                 .username(loginRequest.getUsername())
                 .build();
+    }
+    public boolean isLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 }
