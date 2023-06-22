@@ -8,12 +8,16 @@ import com.example.redditClone.model.Vote;
 import com.example.redditClone.repository.PostRepository;
 import com.example.redditClone.repository.VoteRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static com.example.redditClone.model.VoteType.UPVOTE;
+
+
 @Service
 @AllArgsConstructor
 
@@ -22,6 +26,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final PostRepository postRepository;
     private final AuthService authService;
+    @Transactional
     public void vote(VoteDto voteDto) {
         Post post = postRepository.findById(voteDto.getPostID())
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + voteDto.getPostID()));

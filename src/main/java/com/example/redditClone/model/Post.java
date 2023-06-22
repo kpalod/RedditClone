@@ -2,10 +2,7 @@ package com.example.redditClone.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.NotBlank;
@@ -13,6 +10,8 @@ import java.time.Instant;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+@Getter
+@Setter
 @Data
 @Entity
 @Builder
@@ -30,7 +29,7 @@ public class Post {
     @Nullable
     @Lob
     private String description;
-    private Integer voteCount;
+    private Integer voteCount = 0;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
@@ -38,5 +37,4 @@ public class Post {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private Subreddit subreddit;
-
 }
