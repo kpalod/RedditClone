@@ -8,8 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+
 
 @Data
 @Entity
@@ -21,7 +20,7 @@ public class Subreddit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "name is required")
+
     private String name;
     private String description;
     @OneToMany(fetch = FetchType.LAZY)

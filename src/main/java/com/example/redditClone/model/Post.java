@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -22,7 +21,6 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
-    @NotBlank(message = "Post name is required")
     private String postName;
     @Nullable
     private String url;
