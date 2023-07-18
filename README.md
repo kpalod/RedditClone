@@ -2,7 +2,7 @@
 ShareSpace is a community-driven content sharing platform built with Spring Boot in Java, offering a familiar and engaging experience for users to discover and discuss topics of interest. :speech_balloon: :earth_americas:
 
 
-##Features
+## Features
 🌐 Communities: Create, join, and explore various communities centered around specific topics.
 
 📝 Posts: Submit and browse posts within communities, sharing valuable content and ideas.
@@ -18,7 +18,7 @@ ShareSpace is a community-driven content sharing platform built with Spring Boot
 🚀 Deployment with AWS EC2: Application packaged as a JAR file and deployed on AWS EC2.
 
 
-##Technolgies used  :computer:
+## Technolgies used  :computer:
 - Java
 - Spring Boot
 - Spring Security
